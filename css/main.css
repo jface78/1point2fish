@@ -1,0 +1,99 @@
+* {
+  box-sizing:border-box;
+}
+
+body {
+  font-family:Verdana, Geneva, san-serif;
+  font-size:16px;
+  text-align:center;
+  background-color:#F5F5F5;
+  color:#333;
+}
+
+ul {
+  list-style-type:none;
+}
+
+.tabber {
+  width:50%;
+  margin:0 auto;
+}
+
+.tabber header {
+  text-align:left;
+}
+.tabber header h3 {
+  display:inline-block;
+  cursor:pointer;
+  padding:10px;
+  margin:0;
+  background-color:#FDFDFD;
+  border:1px solid gray;
+  border-bottom:none;
+  border-top-left-radius:5px;
+  border-top-right-radius: 20px;
+}
+.tabber header h3:hover {
+  background-color:#ccc;
+}
+.tabber content {
+  display:none;
+  border:1px solid gray;
+  padding:20px;
+  text-align:left;
+  border-bottom-left-radius:5px;
+  border-bottom-right-radius:5px;
+  background-color:#FDFDFD;
+}
+
+.tabber content header {
+  font-size:1.1em;
+  padding-left:10px;
+  margin-bottom:15px;
+}
+
+.tabber content footer {
+  font-size:1.1em;
+  padding-left:10px;
+  margin-top:15px;
+}
+.tabber content footer #formError {
+  font-size:1.2em;
+  margin-top:15px;
+  text-align:center;
+  color:green;
+}
+.tabber content footer input {
+  padding:5px;
+  border-radius:5px;
+  border:1px solid gray;
+  width:300px;
+  outline:none;
+  font-size:1.1em;
+}
+
+.libraryItem {
+  padding:20px;
+  border:1px solid gray;
+  border-radius:15px;
+  white-space:nowrap;
+  margin:5px;
+  display:inline-block;
+  cursor:pointer;
+  background-color:#FFF;
+  opacity:0.5;
+}
+
+.libraryItem.selected {
+  opacity:1;
+}
+
+.libraryItem i {
+  margin-right:5px;
+}
+
+#captcha {
+  width:304px;
+  margin:0 auto;
+  margin-top:20px;
+}

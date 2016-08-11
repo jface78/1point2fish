@@ -1,8 +1,9 @@
 <?php
 #!/usr/bin/php -q
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+//error_reporting(E_ALL);
+//ini_set('display_errors', 1);
 include ('../../../fish_credentials.php');
+include ('phpQuery.php');
 
 function extractVersion($scriptTag) {
   if (preg_match('/\d+(\.\d+)+/', $scriptTag, $matches)) { 
@@ -18,6 +19,18 @@ function storeVersionNumber($dbh, $libID, $version) {
   $query = 'UPDATE libraries SET currentVersion=:version, lastUpdated=now() WHERE libraryID=:libID';
   $sth = $dbh -> prepare($query);
   $sth -> execute([':version' => $version, ':libID' => $libID]);
+}
+
+function sendErrorMessage($library, $url, $path) {
+  $headers = 'From: noreply@1point2.fish' . "\r\n" .
+      'Reply-To: noreply@1point2.fish' . "\r\n" .
+      'X-Mailer: PHP/' . phpversion();
+  $subject = 'ERROR scraping 1.2Fish page';
+  $message = '1.2Fish failed to extract a version number from the following library:' . "\n\n";
+  $message .= 'Name: ' . $library . "\n";
+  $message .= 'URL: ' . $url . "\n";
+  $message .= 'DOM Path: ' . $path . "\n";
+  mail(MY_EMAIL_ADDRESS, $subject, $message, $headers);
 }
 
 function mailRelevantUsers($dbh, $lib_updates) {
@@ -68,13 +81,12 @@ try {
   echo 'Connection failed: ' . $e->getMessage();
 }
 
-$query = 'SELECT libraryID, name, url, currentVersion FROM libraries';
+$query = 'SELECT libraryID, name, url, currentVersion, path FROM libraries WHERE isActive=:active';
 $sth = $dbh -> prepare($query);
-$sth -> execute();
+$sth -> execute([':active' => '1']);
 $libs = $sth -> fetchAll(PDO::FETCH_ASSOC);
 
 $lib_updates = [];
-
 for ($s=0; $s < count($libs); $s++) {
   $libraryID = $libs[$s]['libraryID'];
   $url = $libs[$s]['url'];
@@ -90,29 +102,15 @@ for ($s=0; $s < count($libs); $s++) {
   //$httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
   $output = curl_exec($curl);
   curl_close($curl);
-  $dom = new DOMDocument;
-  libxml_use_internal_errors(true);
-  $dom->preserveWhiteSpace = false;
-  $dom->validateOnParse = true;
-  $dom->loadHTML($output);
-  $items = $dom->getElementsByTagName('h3');
-
-  for ($z=0; $z < $items->length; $z++) {
-    if (strtolower($items->item($z)->nodeValue) == strtolower($libs[$s]['name'])) {
-      //echo $items->item($z)->nodeValue . ': ';
-      $parent = $items->item($z)->nextSibling;
-      while ($parent -> nodeName == '#text') {
-        $parent = $parent->nextSibling;
-      }
-      $version = extractVersion($parent -> getElementsByTagName('code')[0] -> nodeValue);
-      if ($version != $libs[$s]['currentVersion']) {
-        storeVersionNumber($dbh, $libraryID, $version);
-        array_push($lib_updates, $libraryID);
-        //mailRelevantUsers($libraryID, $version, $libs[$s]['name'], $libs[$s]['url']);
-      }
-      //echo $version . '<br>';
-    }
+  $doc = phpQuery::newDocumentHTML($output);
+  $version = extractVersion(pq($libs[$s]['path']));
+  if (empty($version)) {
+    sendErrorReport($libs[$s]['name'], $libs[$s]['path'], $libs[$s]['url']);
+  } else if ($version != $libs[$s]['currentVersion']) {
+    storeVersionNumber($dbh, $libraryID, $version);
+    //array_push($lib_updates, $libraryID);
   }
+  phpQuery::unloadDocuments();
 }
 
 if (count($lib_updates)) {
