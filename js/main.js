@@ -37,15 +37,52 @@ function setupTabber() {
   $('.tabber header h3').each(function(index, item) {
     $(item).click(function() {
       $('.tabber').find('content').css('display', 'none');
-      console.log($('.tabber').find('#tab-' + $(item).data('tab')).length);
       $('.tabber').find('#tab-' + $(item).data('tab')).css('display', 'block');
     });
   });
   $($('.tabber header h3')[0]).trigger('click');
 }
 
+function createNewAccount() {
+  $('#formError').html('&nbsp;');
+  if (!$('#g-recaptcha-response').val().trim().length) {
+    $('#formError').text('Verify that you\'re a human.');
+    return;
+  }
+  if (!$('#userEmail').val().trim().length) {
+    $('#formError').text('Enter your email address.');
+    return;
+  }
+  $.ajax({
+    method:'POST',
+    dataType:'json',
+    data: {email: $('#userEmail').val(), recaptcha: $('#g-recaptcha-response').val()},
+    url: SERVICE_URL + 'createAccount.php',
+    success: function(data) {
+      console.log('ok');
+      new DictumAlertBox('success');
+    }, error: function(response) {
+      if (response.status == 400) {
+        $('#formError').text('Invalid email address.');
+      } else if (response.status == 409) {
+        $('#formError').text('We have decided you aren\'t human.');
+        $('#emailForm').remove();
+        $('#captcha').remove();
+        $('#createBtn').remove();
+      }
+    }
+  });
+}
+
 $(window).ready(function() {
-  console.log('ready');
   setupTabber();
   getSupportedLibraries();
+  $('#userEmail').keyup(function(event) {
+    if (event.keyCode == 13) {
+      createNewAccount();
+    }
+  });
+  $('#createBtn').click(function(event) {
+    createNewAccount();
+  });
 });

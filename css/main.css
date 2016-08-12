@@ -58,7 +58,7 @@ ul {
   margin-top:15px;
 }
 .tabber content footer #formError {
-  font-size:1.2em;
+  font-size:1.1em;
   margin-top:15px;
   text-align:center;
   color:green;
@@ -66,8 +66,8 @@ ul {
 .tabber content footer input {
   padding:5px;
   border-radius:5px;
-  border:1px solid gray;
-  width:300px;
+  border:1px solid #d3d3d3;
+  width:304px;
   outline:none;
   font-size:1.1em;
 }
@@ -80,7 +80,7 @@ ul {
   margin:5px;
   display:inline-block;
   cursor:pointer;
-  background-color:#FFF;
+  background: #cacc3a;;
   opacity:0.5;
 }
 
@@ -93,7 +93,38 @@ ul {
 }
 
 #captcha {
-  width:304px;
+  width:100%;
   margin:0 auto;
   margin-top:20px;
+}
+
+#emailForm {
+  margin-top:15px;
+}
+#captcha span, #emailForm span {
+  display:inline-block;
+  width:300px;
+  vertical-align:top;
+  text-align:right;
+}
+
+.g-recaptcha {
+  display:inline-block;
+}
+
+button {
+  font-size: 1.1em;
+  background: #cacc3a;
+  padding: 10px;
+  box-shadow: none;
+  border: 1px solid gray;
+  outline: none;
+  border-radius: 15px;
+  color: #000000;
+  cursor: pointer;
+  margin-top: 15px;
+  letter-spacing: 1px;
+}
+button:hover {
+  color:#0074da;
 }

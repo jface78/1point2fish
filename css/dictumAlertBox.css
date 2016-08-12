@@ -1,0 +1,83 @@
+.alertBoxBG {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  width: 100vw;
+  background-color: gray;
+  opacity: 0;
+  z-index:998;
+}
+
+.alertBoxFG {
+  background-color: #f9f9f9;
+  position: fixed;
+  top:50%;
+  left:50%;
+  transform: translate(-50%, -50%);
+  /*(left:0;
+  right:0;
+  margin-left:auto;
+  margin-right:auto;*/
+  min-width: 300px;
+  border-radius: 4px;
+  background: linear-gradient(0deg, #f6f6f6, #ececec);
+  color: #696a6c;
+  font-size: 24px;
+  box-shadow: 3px 3px 5px 0px rgba(189,183,189,1);
+  opacity:0;
+  max-width:80%;
+  max-height:80%;
+  padding-bottom:20px;
+  overflow:auto;
+  z-index:999;
+}
+
+.alertBoxFG > header {
+  height: 40px;
+  line-height: 40px;
+  white-space: nowrap;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  opacity: 1;
+  font-size: 18px;
+  box-shadow: none;
+  background: none;
+}
+.alertBoxFG > header > .closer {
+  float:right;
+  vertical-align:middle;
+  line-height:40px;
+  margin-right:10px;
+  cursor:pointer;
+}
+.alertBoxFG > header > .closer:hover {
+  opacity:0.8;
+}
+
+.alertBoxFG > .message {
+  padding:30px;
+  line-height:36px;
+  word-wrap:break-word;
+}
+
+.alertBoxFG > .buttons {
+  text-align:right;
+  padding:30px;
+  padding-top:0px;
+}
+
+.alertBoxFG > .buttons > button {
+  width: 90px;
+  margin-left: 20px;
+  background-color: #00a2d0;
+  color: #FFF;
+  cursor: pointer;
+  border: none;
+  height: 40px;
+  font-size: 14px;
+}
+
+.alertBoxFG > .buttons > button:hover {
+  color:#333;
+}

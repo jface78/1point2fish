@@ -27,11 +27,13 @@
     <link rel="manifest" href="/manifest.json">
     
     <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" type="text/css" href="css/dictumAlertBox.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script src='https://www.google.com/recaptcha/api.js'></script>
     <script src="https://use.fontawesome.com/40eaec28fc.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/DictumAlertBox.js"></script>
   </head>
   <body>
     <div>
@@ -51,12 +53,16 @@
         <header>Select which libraries you'd like to track.</header>
         <main></main>
         <footer>
-        <hr>
-        Now enter your email address: <input type="text">
-        <div id="captcha">
-          <div class="g-recaptcha" data-sitekey="6LdaYScTAAAAAARS1-RgGRiL9R7xJ1RzFiqFFadQ"></div>
-        </div>
-        <div id="formError">sdfdsf</div>
+          <div id="captcha">
+            <span>Prove you're not an AI:</span>
+            <div class="g-recaptcha" data-sitekey="6LdaYScTAAAAAARS1-RgGRiL9R7xJ1RzFiqFFadQ"></div>
+          </div>
+          <div id="emailForm">
+            <span>Enter your email address:</span>
+            <input type="text" id="userEmail">
+          </div>
+          <div id="formError">&nbsp;</div>
+          <div id="createBtn" style="text-align:center;"><button>create</button></div>
         </footer>
       </content>
       <content id="tab-2">
