@@ -1,9 +1,11 @@
 var SERVICE_URL = 'services/';
 var listLibraries = [];
+var overlayArray = [];
 
 function addLibraryClickEvent(span, id) {
   $(span).click(function(event) {
-    if ($(span).find('i').hasClass('fa-plus')) {
+    listLibraries = [];
+    if (!$(span).hasClass('selected')) {
       $(span).find('i').removeClass('fa-plus');
       $(span).find('i').addClass('fa-minus');
       $(span).addClass('selected');
@@ -12,6 +14,11 @@ function addLibraryClickEvent(span, id) {
       $(span).find('i').addClass('fa-plus');
       $(span).removeClass('selected');
     }
+    $('.libraryItem').each(function(index, item) {
+      if ($(item).hasClass('selected')) {
+        listLibraries.push($(item).data('id'));
+      }
+    });
   });
 }
 
@@ -45,6 +52,10 @@ function setupTabber() {
 
 function createNewAccount() {
   $('#formError').html('&nbsp;');
+  if (!listLibraries.length) {
+    $('#formError').text('Choose at least one library to track.');
+    return;
+  }
   if (!$('#g-recaptcha-response').val().trim().length) {
     $('#formError').text('Verify that you\'re a human.');
     return;
@@ -53,14 +64,17 @@ function createNewAccount() {
     $('#formError').text('Enter your email address.');
     return;
   }
+  console.log('pre');
   $.ajax({
     method:'POST',
     dataType:'json',
-    data: {email: $('#userEmail').val(), recaptcha: $('#g-recaptcha-response').val()},
+    data: {email: $('#userEmail').val(), recaptcha: $('#g-recaptcha-response').val(), libs:listLibraries},
     url: SERVICE_URL + 'createAccount.php',
-    success: function(data) {
-      console.log('ok');
-      new DictumAlertBox('success');
+    statusCode: {
+      200: function(data) {
+        console.log(data);
+        new DictumAlertBox('success');
+      }
     }, error: function(response) {
       if (response.status == 400) {
         $('#formError').text('Invalid email address.');

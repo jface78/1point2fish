@@ -41,7 +41,7 @@
     </div>
     <div style="margin-top:20px;">
       <h2>1Point2.Fish</h2>
-      software version monitor<br><br>
+      software version tracking<br><br>
     </div>
     <nav class="tabber">
       <header>
