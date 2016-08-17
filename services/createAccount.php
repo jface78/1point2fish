@@ -17,9 +17,14 @@ $options = array(
     'method'  => 'POST',
     'content' => http_build_query($data),
   ),
+  'ssl'=>array(
+        'verify_peer'=>false,
+        'verify_peer_name'=>false,
+    )
 );
 $context  = stream_context_create($options);
 $result = json_decode(file_get_contents($url, false, $context));
+
 if ($result -> success == true) {
   try {
     $dbh = new PDO('mysql:host=' .DB_HOST . ';dbname=' . DB_DATABASE, DB_USER, DB_PASS);
@@ -43,14 +48,22 @@ if ($result -> success == true) {
     $sth -> execute([':email' => $_POST['email'], ':hash' => $hash]);
     $userID = $dbh->lastInsertId();
   }
-  echo $userID;
   for ($i=0; $i < count($_POST['libs']); $i++) {
     $query = 'INSERT INTO user_libraries(userID, libraryID) VALUES(:user, :lib)';
     $sth = $dbh -> prepare($query);
     $sth -> execute([':user' => $userID, ':lib' => $_POST['libs'][$i]]);
   }
-  
+
+  $headers = 'From: noreply@1point2.fish' . "\r\n" .
+      'Reply-To: noreply@1point2.fish' . "\r\n" .
+      'X-Mailer: PHP/' . phpversion();
+  $subject = 'Verify your address';
+  $message = 'You have requested to receive updates from 1point2.fish. Please click on the below link to verify your account:' . "\n\n";
+  $message .= '<a href="http://1point2.fish/verify.php?hash=' . $hash . '" target="_blank">http://1point2.fish/verify.php</a>' . "\n\n";
+  $message .= 'If this was sent to you in error, please ignore this email.';
+  mail($_POST['email'], $subject, $message, $headers);
   http_response_code(200);
 } else {
   http_response_code(409);
 }
+?>

@@ -61,12 +61,17 @@
             <span>Enter your email address:</span>
             <input type="text" id="userEmail">
           </div>
-          <div id="formError">&nbsp;</div>
+          <div class="formError">&nbsp;</div>
           <div id="createBtn" style="text-align:center;"><button>create</button></div>
         </footer>
       </content>
       <content id="tab-2">
-      TAB TWO
+        <div id="submitForm">
+          <span>Library name:</span><input type="text" id="libName"><br><br>
+          <span>Download URL:</span><input type="text" id="libURL"><br><br>
+          <div class="formError">&nbsp;</div><br><br>
+          <div id="submitBtn" style="text-align:center;"><button>submit</button></div>
+        </div>
       </content>
       <content id="tab-3">
         <main>

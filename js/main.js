@@ -50,36 +50,58 @@ function setupTabber() {
   $($('.tabber header h3')[0]).trigger('click');
 }
 
+function requestALibrary() {
+  $('#submitForm .formError').html('&nbsp;');
+  if (!$('#libName').val().trim().length || !$('#libURL').val().trim().length) {
+    $('#submitForm .formError').text('Fill out both fields.');
+    return;
+  }
+  $.ajax({
+    method:'POST',
+    data: {libName: $('#libName').val(), libURL: $('#libURL').val()},
+    url: SERVICE_URL + 'requestLibrary.php',
+    statusCode: {
+      200: function(data) {
+        $('#libName').val('');
+        $('#libURL').val('');
+        new DictumAlertBox('Request received. We\'ll look into it. No promises, though.');
+      }
+    }, error: function() {
+      new DictumAlertBox('There was an error submitting your request. Please try again later.');
+    }
+  });
+}
+
 function createNewAccount() {
-  $('#formError').html('&nbsp;');
+  $('.tabber footer .formError').html('&nbsp;');
   if (!listLibraries.length) {
-    $('#formError').text('Choose at least one library to track.');
+    $('.tabber footer .formError').text('Choose at least one library to track.');
     return;
   }
   if (!$('#g-recaptcha-response').val().trim().length) {
-    $('#formError').text('Verify that you\'re a human.');
+    $('.tabber footer .formError').text('Verify that you\'re a human.');
     return;
   }
   if (!$('#userEmail').val().trim().length) {
-    $('#formError').text('Enter your email address.');
+    $('.tabber footer .formError').text('Enter your email address.');
     return;
   }
-  console.log('pre');
   $.ajax({
     method:'POST',
-    dataType:'json',
     data: {email: $('#userEmail').val(), recaptcha: $('#g-recaptcha-response').val(), libs:listLibraries},
     url: SERVICE_URL + 'createAccount.php',
     statusCode: {
       200: function(data) {
-        console.log(data);
-        new DictumAlertBox('success');
+        grecaptcha.reset()
+        var message = 'You\'ve been signed up to receive updates on your selected libraries, but your email address must first be verified.<br><br>';
+        message += 'An email has been sent to ' + $('#userEmail').val() + '. Click on the link, and your account will then be activated.';
+        new DictumAlertBox(message);
       }
     }, error: function(response) {
       if (response.status == 400) {
-        $('#formError').text('Invalid email address.');
+        $('.tabber footer .formError').text('Invalid email address.');
       } else if (response.status == 409) {
-        $('#formError').text('We have decided you aren\'t human.');
+        $('.tabber footer .formError').text('We have decided you aren\'t human.');
         $('#emailForm').remove();
         $('#captcha').remove();
         $('#createBtn').remove();
@@ -98,5 +120,8 @@ $(window).ready(function() {
   });
   $('#createBtn').click(function(event) {
     createNewAccount();
+  });
+  $('#submitBtn').click(function(event) {
+    requestALibrary();
   });
 });
