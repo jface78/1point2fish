@@ -8,24 +8,25 @@ try {
 } catch (PDOException $e) {
   echo 'Connection failed: ' . $e->getMessage();
 }
-if (!isset($_GET['hash']) || empty($_GET['hash'])) {
+if (!isset($_GET['email']) || empty($_GET['email'])) {
   http_response_code(400);
   exit();
 }
-$query = 'SELECT email FROM users WHERE hash=:hash AND active=:active';
+$query = 'SELECT userID FROM users WHERE email=:email';
 $sth = $dbh -> prepare($query);
-$sth -> execute([':hash' => $_GET['hash'], ':active' => 0]);
+$sth -> execute([':email' => $_GET['email']]);
 
-$message = "Unable to locate your account, or account already activated.";
+$message = "Unable to locate your account.";
 if ($sth -> rowCount() > 0) {
-  $email = $sth -> fetch()[0];
-  $message = "Thank you. Your account has been activated.<br><br>";
-  $message .= 'To alter your selections, update the chosen libraries on the main page using the same email address.<br><br>';
-  $message .= 'To unsubscribe from all future notification emails, either follow the "unsubscribe" link at the bottom ';
-  $message .= 'of your notification emails, or click <a href="unsubscribe.php?email=' . $email . '">here.</a>';
-  $query = 'UPDATE users SET active=:active WHERE hash=:hash';
+  $userID = $sth -> fetch()[0];
+  $query = 'DELETE FROM user_libraries WHERE userID=:id';
   $sth = $dbh -> prepare($query);
-  $sth -> execute([':active' => '1', ':hash' => $_GET['hash']]);
+  $sth -> execute([':id' => $userID]);
+  $query = 'DELETE FROM users WHERE userID=:id';
+  $sth = $dbh -> prepare($query);
+  $sth -> execute([':id' => $userID]);
+  
+  $message = "Your account has been deactivated.<br><br>";
 }
 ?>
 

@@ -48,6 +48,8 @@ function mailRelevantUsers($dbh, $lib_updates) {
   $headers = 'From: noreply@1point2.fish' . "\r\n" .
       'Reply-To: noreply@1point2.fish' . "\r\n" .
       'X-Mailer: PHP/' . phpversion();
+  $headers .= "MIME-Version: 1.0" . "\r\n";
+  $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
   $subject = 'code library updates from 1point2.fish';
   $message = 'Hello,' . "\n\n";
   $message .= 'You are receiving this email because you wanted to be notified when ' .
@@ -70,6 +72,7 @@ function mailRelevantUsers($dbh, $lib_updates) {
     $sth = $dbh -> prepare($query);
     $sth -> execute([':userID' => $notify_users[$z]]);
     $email = $sth -> fetch()[0];
+    $message .= 'To unsubscribe from these notifications, click <a href="http://1point2.fish/unsubscribe.php?email=' . $email . '">here.</a>';
     mail($email, $subject, $message, $headers);
   }
 }

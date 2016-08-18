@@ -2,20 +2,65 @@
   box-sizing:border-box;
 }
 
+html, body {
+  height: 100%;
+}
+
 body {
   font-family:Verdana, Geneva, san-serif;
   font-size:16px;
   text-align:center;
   background-color:#F5F5F5;
   color:#333;
+  margin:0px;
 }
 
 ul {
   list-style-type:none;
 }
 
+h3 {
+  font-weight: bold;
+  margin-bottom: 1.2em;
+  margin-top: 1.2em;
+  font-size:1em;
+}
+
+h4 {
+  margin-top:5px;
+  font-weight:inherit;
+}
+
+.page_wrap {
+  min-height: 100%;
+  margin-bottom: -25px;
+  padding-bottom:20px;
+}
+.page_wrap:after {
+  content: "";
+  display: block;
+}
+.site_footer, .page_wrap:after {
+  height: 25px; 
+}
+.site_footer {
+  background: #651818;
+  color:#F0F0F0;
+  font-size:11px;
+  line-height:25px;
+  vertical-align:middle;
+  text-align:right;
+}
+.site_footer div {
+  width:95%;
+}
+
+#logo { 
+  max-width:300px;
+}
+
 .tabber {
-  width:50%;
+  width:90%;
   margin:0 auto;
 }
 
@@ -27,16 +72,20 @@ ul {
   cursor:pointer;
   padding:10px;
   margin:0;
-  background-color:#FDFDFD;
+  background-color:#e2e2e2;
   border:1px solid gray;
   border-bottom:none;
   border-top-left-radius:5px;
   border-top-right-radius: 20px;
 }
+.tabber header h3.active {
+  background-color:#FDFDFD;
+}
+background-color:#FDFDFD;
 .tabber header h3:hover {
   background-color:#ccc;
 }
-.tabber content {
+.tabber section {
   display:none;
   border:1px solid gray;
   padding:20px;
@@ -46,24 +95,24 @@ ul {
   background-color:#FDFDFD;
 }
 
-.tabber content header {
+.tabber section header {
   font-size:1.1em;
   padding-left:10px;
   margin-bottom:15px;
 }
 
-.tabber content footer {
+.tabber section footer {
   font-size:1.1em;
   padding-left:10px;
   margin-top:15px;
 }
-.tabber content .formError {
+.tabber section .formError {
   font-size:1.1em;
   margin-top:15px;
   text-align:center;
   color:green;
 }
-.tabber content input {
+.tabber section input {
   padding:5px;
   border-radius:5px;
   border:1px solid #d3d3d3;

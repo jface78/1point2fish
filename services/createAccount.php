@@ -32,11 +32,13 @@ if ($result -> success == true) {
   } catch (PDOException $e) {
     echo 'Connection failed: ' . $e->getMessage();
   }
-  $query = 'SELECT userID FROM users WHERE email=:email AND verified=:verify';
+  $query = 'SELECT userID FROM users WHERE email=:email AND active=:verify';
   $sth = $dbh -> prepare($query);
   $sth -> execute([':verify' => '1', ':email' => $_POST['email']]);
   $count = $sth -> rowCount();
+  $needsVerification = true;
   if ($count) {
+    $needsVerification = false;
     $userID = $sth -> fetch()[0];
     $query = 'DELETE from user_libraries WHERE userID=:userID';
     $sth = $dbh -> prepare($query);
@@ -54,14 +56,21 @@ if ($result -> success == true) {
     $sth -> execute([':user' => $userID, ':lib' => $_POST['libs'][$i]]);
   }
 
-  $headers = 'From: noreply@1point2.fish' . "\r\n" .
-      'Reply-To: noreply@1point2.fish' . "\r\n" .
-      'X-Mailer: PHP/' . phpversion();
-  $subject = 'Verify your address';
-  $message = 'You have requested to receive updates from 1point2.fish. Please click on the below link to verify your account:' . "\n\n";
-  $message .= '<a href="http://1point2.fish/verify.php?hash=' . $hash . '" target="_blank">http://1point2.fish/verify.php</a>' . "\n\n";
-  $message .= 'If this was sent to you in error, please ignore this email.';
-  mail($_POST['email'], $subject, $message, $headers);
+  if ($needsVerification) {
+    $headers = 'From: noreply@1point2.fish' . "\r\n" .
+        'Reply-To: noreply@1point2.fish' . "\r\n" .
+        'X-Mailer: PHP/' . phpversion();
+    $headers .= "MIME-Version: 1.0" . "\r\n";
+    $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+    $subject = 'Verify your address';
+    $message = 'You have requested to receive updates from 1point2.fish. Please click on the below link to verify your account:' . "\n\n";
+    $message .= '<a href="http://1point2.fish/verify.php?hash=' . $hash . '" target="_blank">http://1point2.fish/verify.php</a>' . "\n\n";
+    $message .= 'If this was sent to you in error, please ignore this email.';
+    mail($_POST['email'], $subject, $message, $headers);
+  }
+  header("Content-Type: application/json");
+  $results['needsVerification'] = $needsVerification;
+  echo json_encode($results);
   http_response_code(200);
 } else {
   http_response_code(409);

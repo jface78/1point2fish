@@ -33,7 +33,7 @@ function getSupportedLibraries() {
         var i = $('<i class="fa fa-plus" aria-hidden="true"></i></span>');
         $(span).append(i);
         $(span).append(item.name);
-        $($('.tabber').find('content')[0]).find('main').append(span);
+        $($('.tabber').find('section')[0]).find('main').append(span);
         addLibraryClickEvent(span, item.libraryID);
       });
     }
@@ -43,7 +43,9 @@ function getSupportedLibraries() {
 function setupTabber() {
   $('.tabber header h3').each(function(index, item) {
     $(item).click(function() {
-      $('.tabber').find('content').css('display', 'none');
+      $('.tabber').find('header h3').removeClass('active');
+      $(item).addClass('active');
+      $('.tabber').find('section').css('display', 'none');
       $('.tabber').find('#tab-' + $(item).data('tab')).css('display', 'block');
     });
   });
@@ -90,11 +92,17 @@ function createNewAccount() {
     method:'POST',
     data: {email: $('#userEmail').val(), recaptcha: $('#g-recaptcha-response').val(), libs:listLibraries},
     url: SERVICE_URL + 'createAccount.php',
+    dataType: 'json',
     statusCode: {
       200: function(data) {
-        grecaptcha.reset()
-        var message = 'You\'ve been signed up to receive updates on your selected libraries, but your email address must first be verified.<br><br>';
-        message += 'An email has been sent to ' + $('#userEmail').val() + '. Click on the link, and your account will then be activated.';
+        grecaptcha.reset();
+        var message;
+        if ($(data).find('needsVerification').text() == 'true') {
+          message = 'You\'ve been signed up to receive updates on your selected libraries, but your email address must first be verified.<br><br>';
+          message += 'An email has been sent to ' + $('#userEmail').val() + '. Click on the link, and your account will then be activated.';
+        } else {
+          message = 'You\'re preferences have been updated.';
+        }
         new DictumAlertBox(message);
       }
     }, error: function(response) {

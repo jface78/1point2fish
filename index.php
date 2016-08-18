@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="US">
+<html lang="en-US">
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="Author" content="1.2.Fish">
@@ -8,6 +8,14 @@
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="img/favicons/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
+    
+    <meta property="og:url" content="http://1point2.fish" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="1Point2.Fish" />
+    <meta property="og:description" content="A web service to keep developers up-to-date with the latest software library releases." />
+    <meta property="og:image" content="http://1point2.fish/img/logo_large.png" />
+    <meta property="og:image:width" content="200" />
+    <meta name="google-site-verification" content="RjuLN5Hmdz3vY4cuXzYljakCzNI_3f55yMlhvv96MzI" />
     
     <title>1.2 Fish - Red Fish, Blue Fish</title>
 
@@ -28,6 +36,9 @@
     
     <link rel="stylesheet" type="text/css" href="css/main.css">
     <link rel="stylesheet" type="text/css" href="css/dictumAlertBox.css">
+    <link rel="stylesheet" type="text/css" media="(max-width: 767px)" href="css/mobile.css">
+    <link rel="stylesheet" type="text/css" media="(max-width: 400px)" href="css/tiny.css"> 
+    
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script src='https://www.google.com/recaptcha/api.js'></script>
@@ -36,60 +47,64 @@
     <script src="js/DictumAlertBox.js"></script>
   </head>
   <body>
-    <div>
-      <img src="img/logo_large.png" alt="1.2 Fish" title="1.2 Fish">
-    </div>
-    <div style="margin-top:20px;">
-      <h2>1Point2.Fish</h2>
-      software version tracking<br><br>
-    </div>
-    <nav class="tabber">
-      <header>
-        <h3 data-tab="1">Configure</h3>
-        <h3 data-tab="2">Request a library</h3>
-        <h3 data-tab="3">WUT?</h3>
-      </header>
-      <content id="tab-1">
-        <header>Select which libraries you'd like to track.</header>
-        <main></main>
-        <footer>
-          <div id="captcha">
-            <span>Prove you're not an AI:</span>
-            <div class="g-recaptcha" data-sitekey="6LdaYScTAAAAAARS1-RgGRiL9R7xJ1RzFiqFFadQ"></div>
+    <div class="page_wrap">
+      <div>
+        <img src="img/logo_large.png" alt="1.2 Fish" title="1.2 Fish" id="logo">
+      </div>
+      <div style="margin-top:20px;">
+        <h2>1Point2.Fish</h2>
+        software version tracking<br><br>
+      </div>
+      <div class="tabber">
+        <nav>
+          <header>
+            <h3 data-tab="1">Configure</h3>
+            <h3 data-tab="2">Request a library</h3>
+            <h3 data-tab="3">WUT?</h3>
+          </header>
+        </nav>
+        <section id="tab-1">
+          <h4>Select which libraries you'd like to track</h4>
+          <main></main>
+          <footer>
+            <div id="captcha">
+              <span>Prove you're not an AI:</span>
+              <div class="g-recaptcha" data-sitekey="6LdaYScTAAAAAARS1-RgGRiL9R7xJ1RzFiqFFadQ"></div>
+            </div>
+            <div id="emailForm">
+              <span>Enter your email address:</span>
+              <input type="email" id="userEmail">
+            </div>
+            <div class="formError">&nbsp;</div>
+            <div id="createBtn" style="text-align:center;"><button>create</button></div>
+          </footer>
+        </section>
+        <section id="tab-2">
+          <div id="submitForm">
+            <h4>Submit a code library to be monitored</h4>
+            <span>Library name:</span><input type="text" id="libName"><br><br>
+            <span>Download URL:</span><input type="text" id="libURL"><br><br>
+            <div class="formError">&nbsp;</div><br><br>
+            <div id="submitBtn" style="text-align:center;"><button>submit</button></div>
           </div>
-          <div id="emailForm">
-            <span>Enter your email address:</span>
-            <input type="text" id="userEmail">
-          </div>
-          <div class="formError">&nbsp;</div>
-          <div id="createBtn" style="text-align:center;"><button>create</button></div>
-        </footer>
-      </content>
-      <content id="tab-2">
-        <div id="submitForm">
-          <span>Library name:</span><input type="text" id="libName"><br><br>
-          <span>Download URL:</span><input type="text" id="libURL"><br><br>
-          <div class="formError">&nbsp;</div><br><br>
-          <div id="submitBtn" style="text-align:center;"><button>submit</button></div>
-        </div>
-      </content>
-      <content id="tab-3">
-        <main>
-          
-          <ul>
-            <h4>What is this? I'm easily confused and therefore angry.</h3>
-            <li><b>1.2Fish</b> is a website that monitors various programming libraries, and emails users when a new release
-        becomes available.</li>
-            <h4>Okay, well how does it work?</h3>
-            <li>You provide an email address, select whichever libraries you want to track, and 
-            we email you a notification when and if that happens.</li>
-            <h4>No, how does it <i>really</i> work?</h3>
-            <li>We have a database of supported libraries. We scrape their download pages every day to see if there's a new release.</li>
-            <h4>When does that happen?</h3>
-            <li>Once a day at midnight EST.</li>
-          </ul>
-        </main>
-      </content>
-    </nav>
+        </section>
+        <section id="tab-3">
+          <h4>Questions</h4>
+            <ul>
+              <li><h3>What is this? I'm easily confused and therefore angry.</h3></li>
+              <li><b>1.2Fish</b> is a website that monitors various programming libraries, and emails users when a new release becomes available.</li>
+              <li><h3>Okay, well how does it work?</h3></li>
+              <li>You provide an email address, select whichever libraries you want to track, and we email you a notification when and if that happens.</li>
+              <li><h3>No, how does it <i>really</i> work?</h3></li>
+              <li>We have a database of supported libraries. We scrape their download pages every day to see if there's a new release.</li>
+              <li><h3>When does that happen?</h3></li>
+              <li>Once a day at midnight EST.</li>
+            </ul>
+        </section>
+      </div>
+    </div>
+    <footer class="site_footer">
+      <div>&copy;2016 1Point2.fish</div>
+    </footer>
   </body>
 </html>
