@@ -2,8 +2,8 @@
 #!/usr/bin/php -q
 //error_reporting(E_ALL);
 //ini_set('display_errors', 1);
-include ('../../../fish_credentials.php');
-include ('phpQuery.php');
+include ('../../fish_credentials.php');
+include ('services/phpQuery.php');
 
 function extractVersion($scriptTag) {
   if (preg_match('/\d+(\.\d+)+/', $scriptTag, $matches)) { 
@@ -115,29 +115,27 @@ for ($s=0; $s < count($libs); $s++) {
   //disable when live
   curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
   curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
-  $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+  //$httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
   $output = curl_exec($curl);
   $doc = phpQuery::newDocumentHTML($output);
   $version = extractVersion(pq($libs[$s]['path']));
+  $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
   curl_close($curl);
   switch($httpCode) {
     case 301:
     case 404:
-      sendHTTPStatusReport($libs[$s]['name'], $libs[$s]['url'], $httpCode);
+      //sendHTTPStatusReport($libs[$s]['name'], $libs[$s]['url'], $httpCode);
       break;
   }
   if (empty($version)) {
-    sendErrorReport($libs[$s]['name'], $libs[$s]['url'], $libs[$s]['path']);
+    //sendErrorReport($libs[$s]['name'], $libs[$s]['url'], $libs[$s]['path']);
   } else if ($version != $libs[$s]['currentVersion']) {
-    storeVersionNumber($dbh, $libraryID, $version);
-    array_push($lib_updates, $libraryID);
+    
   }
+  echo $libs[$s]['name'] . ': ' . $version . '<br>';
   phpQuery::unloadDocuments();
 }
 
-if (count($lib_updates)) {
-  mailRelevantUsers($dbh, $lib_updates);
-}
 
 $dbh = null;
 
