@@ -1,7 +1,7 @@
 <?php
 #!/usr/bin/php -q
-//error_reporting(E_ALL);
-//ini_set('display_errors', 1);
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 include ('../../../fish_credentials.php');
 include ('phpQuery.php');
 
@@ -45,7 +45,7 @@ function mailRelevantUsers($dbh, $lib_updates) {
     }
   }
 
-  $headers = 'From: noreply@1point2.fish' . "\r\n" .
+  $headers = 'From: 1point2.fish' . "\r\n" .
       'Reply-To: noreply@1point2.fish' . "\r\n" .
       'X-Mailer: PHP/' . phpversion();
   $headers .= "MIME-Version: 1.0" . "\r\n";
@@ -54,7 +54,7 @@ function mailRelevantUsers($dbh, $lib_updates) {
   $message = 'Hello,' . "\n\n";
   $message .= 'You are receiving this email because you wanted to be notified when ' .
               'certain code libraries released updates. The following packages have ' .
-              'released new versions:' . "\n\n";
+              'released new versions:' . "<br><br>";
   for ($z=0; $z<count($notify_users);$z++) {
     $query = 'SELECT libraryID FROM user_libraries WHERE userID=:userID';
     $sth = $dbh -> prepare($query);
@@ -65,14 +65,14 @@ function mailRelevantUsers($dbh, $lib_updates) {
       $sth = $dbh -> prepare($query);
       $sth -> execute([':libID' => $libs[$i]['libraryID']]);
       $library_info = $sth -> fetch(PDO::FETCH_ASSOC);
-      $message .= $library_info['name'] . ', version ' . $library_info['currentVersion'] . ' released.' . "\n";
-      $message .= 'Download here: ' . $library_info['url'] . "\n\n";
+      $message .= $library_info['name'] . ', version ' . $library_info['currentVersion'] . ' released.' . "<br>";
+      $message .= 'Download here: ' . $library_info['url'] . "<br><br>";
     }
-    $query = 'SELECT email FROM users WHERE userID=:userID';
+    $query = 'SELECT email FROM users WHERE userID=:userID AND active=:active';
     $sth = $dbh -> prepare($query);
-    $sth -> execute([':userID' => $notify_users[$z]]);
+    $sth -> execute([':userID' => $notify_users[$z], ':active' => '1']);
     $email = $sth -> fetch()[0];
-    $message .= 'To unsubscribe from these notifications, click <a href="http://1point2.fish/unsubscribe.php?email=' . $email . '">here.</a>';
+    $message .= "<br><br>" . 'To unsubscribe from these notifications, click <a href="http://1point2.fish/unsubscribe.php?email=' . $email . '">here.</a>';
     mail($email, $subject, $message, $headers);
   }
 }
@@ -111,7 +111,7 @@ for ($s=0; $s < count($libs); $s++) {
     sendErrorReport($libs[$s]['name'], $libs[$s]['path'], $libs[$s]['url']);
   } else if ($version != $libs[$s]['currentVersion']) {
     storeVersionNumber($dbh, $libraryID, $version);
-    //array_push($lib_updates, $libraryID);
+    array_push($lib_updates, $libraryID);
   }
   phpQuery::unloadDocuments();
 }

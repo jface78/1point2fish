@@ -44,15 +44,13 @@ h4 {
   height: 25px; 
 }
 .site_footer {
-  background: #651818;
-  color:#F0F0F0;
+  color:#3a3434;
   font-size:11px;
   line-height:25px;
   vertical-align:middle;
-  text-align:right;
-}
-.site_footer div {
-  width:95%;
+  text-align:center;
+  letter-spacing:1px;
+  font-weight:bold;
 }
 
 #logo { 
@@ -60,7 +58,7 @@ h4 {
 }
 
 .tabber {
-  width:90%;
+  width:50%;
   margin:0 auto;
 }
 

@@ -1,0 +1,27 @@
+body {
+  font-size:14px;
+}
+
+.tabber {
+  width:90%;
+}
+
+.tabber header h3 {
+  font-size:1em;
+}
+
+.libraryItem {
+  padding:10px;
+  border-radius:10px;
+}
+
+#captcha span, #emailForm span, #submitForm span {
+  width:inherit;
+  text-align:left;
+}
+
+.alertBoxFG {
+  font-size:14px;
+  max-width:95%;
+  max-height:95%;
+}

@@ -57,22 +57,25 @@ if ($result -> success == true) {
   }
 
   if ($needsVerification) {
-    $headers = 'From: noreply@1point2.fish' . "\r\n" .
+    $headers = 'From: 1point2.fish' . "\r\n" .
         'Reply-To: noreply@1point2.fish' . "\r\n" .
         'X-Mailer: PHP/' . phpversion();
     $headers .= "MIME-Version: 1.0" . "\r\n";
     $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
     $subject = 'Verify your address';
-    $message = 'You have requested to receive updates from 1point2.fish. Please click on the below link to verify your account:' . "\n\n";
-    $message .= '<a href="http://1point2.fish/verify.php?hash=' . $hash . '" target="_blank">http://1point2.fish/verify.php</a>' . "\n\n";
+    $message = 'You have requested to receive updates from 1point2.fish. Please click on the below link to verify your account:' . "<br><br>";
+    $message .= '<a href="http://1point2.fish/verify.php?hash=' . $hash . '" target="_blank">http://1point2.fish/verify.php</a>' . "<br><br>";
     $message .= 'If this was sent to you in error, please ignore this email.';
     mail($_POST['email'], $subject, $message, $headers);
   }
-  header("Content-Type: application/json");
+  $dbh = null;
+  header('Content-Type: application/json');
+  $results = [];
   $results['needsVerification'] = $needsVerification;
   echo json_encode($results);
   http_response_code(200);
 } else {
+  $dbh = null;
   http_response_code(409);
 }
 ?>

@@ -103,8 +103,6 @@
         </section>
       </div>
     </div>
-    <footer class="site_footer">
-      <div>&copy;2016 1Point2.fish</div>
-    </footer>
+    <footer class="site_footer">&copy;2016 1Point2.fish</footer>
   </body>
 </html>

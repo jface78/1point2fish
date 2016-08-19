@@ -1,0 +1,33 @@
+body {
+  font-size:12px;
+}
+
+ul {
+  padding-left: 10px;
+}
+
+.libraryItem {
+  padding:5px;
+  border-radius:5px;
+}
+
+.tabber {
+  width:99%;
+}
+
+.tabber section {
+  padding:5px;
+}
+
+.tabber section footer {
+  padding-right:10px;
+}
+
+.tabber section input {
+  width:100%;
+  margin-right:5px;
+}
+
+#captcha {
+  overflow: hidden;
+}

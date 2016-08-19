@@ -97,7 +97,7 @@ function createNewAccount() {
       200: function(data) {
         grecaptcha.reset();
         var message;
-        if ($(data).find('needsVerification').text() == 'true') {
+        if (data.needsVerification == true) {
           message = 'You\'ve been signed up to receive updates on your selected libraries, but your email address must first be verified.<br><br>';
           message += 'An email has been sent to ' + $('#userEmail').val() + '. Click on the link, and your account will then be activated.';
         } else {
