@@ -45,6 +45,16 @@
     <script src="https://use.fontawesome.com/40eaec28fc.js"></script>
     <script src="js/main.js"></script>
     <script src="js/DictumAlertBox.js"></script>
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-27020062-4', 'auto');
+  ga('send', 'pageview');
+
+    </script>
   </head>
   <body>
     <div class="page_wrap">
@@ -53,7 +63,7 @@
       </div>
       <div style="margin-top:20px;">
         <h2>1Point2.Fish</h2>
-        software version tracking<br><br>
+        code library version tracking<br><br>
       </div>
       <div class="tabber">
         <nav>

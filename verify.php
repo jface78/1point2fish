@@ -70,7 +70,7 @@ if ($sth -> rowCount() > 0) {
     </div>
     <div style="margin-top:20px;">
       <h2>1Point2.Fish</h2>
-      software version tracking<br><br>
+      code library version tracking<br><br>
     </div>
     <div style="padding:20px;">
       <?php echo $message;?>
