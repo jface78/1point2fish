@@ -57,7 +57,7 @@ if ($result -> success == true) {
   }
 
   if ($needsVerification) {
-    $headers = 'From: 1point2.fish' . "\r\n" .
+    $headers = 'From: 1Point2Fish<noreply@1point2.fish>' . "\r\n" .
         'Reply-To: noreply@1point2.fish' . "\r\n" .
         'X-Mailer: PHP/' . phpversion();
     $headers .= "MIME-Version: 1.0" . "\r\n";

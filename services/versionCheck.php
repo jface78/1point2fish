@@ -22,7 +22,7 @@ function storeVersionNumber($dbh, $libID, $version) {
 }
 
 function sendErrorReport($library, $url, $path) {
-  $headers = 'From: noreply@1point2.fish' . "\r\n" .
+  $headers = 'From: 1Point2Fish<noreply@1point2.fish>' . "\r\n" .
       'Reply-To: noreply@1point2.fish' . "\r\n" .
       'X-Mailer: PHP/' . phpversion();
   $subject = 'ERROR scraping 1.2Fish page';
@@ -34,7 +34,7 @@ function sendErrorReport($library, $url, $path) {
 }
 
 function sendHTTPStatusReport($library, $url, $code) {
-  $headers = 'From: noreply@1point2.fish' . "\r\n" .
+  $headers = 'From: 1Point2Fish<noreply@1point2.fish>' . "\r\n" .
       'Reply-To: noreply@1point2.fish' . "\r\n" .
       'X-Mailer: PHP/' . phpversion();
   $subject = 'ERROR contacting 1.2Fish download page';
@@ -56,7 +56,7 @@ function mailRelevantUsers($dbh, $lib_updates) {
     }
   }
 
-  $headers = 'From: 1point2.fish' . "\r\n" .
+  $headers = 'From: 1Point2Fish<noreply@1point2.fish>' . "\r\n" .
       'Reply-To: noreply@1point2.fish' . "\r\n" .
       'X-Mailer: PHP/' . phpversion();
   $headers .= "MIME-Version: 1.0" . "\r\n";
