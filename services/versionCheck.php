@@ -1,7 +1,7 @@
 <?php
 #!/usr/bin/php -q
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+//error_reporting(E_ALL);
+//ini_set('display_errors', 1);
 include ('../../../fish_credentials.php');
 include ('phpQuery.php');
 
@@ -21,7 +21,7 @@ function storeVersionNumber($dbh, $libID, $version) {
   $sth -> execute([':version' => $version, ':libID' => $libID]);
 }
 
-function sendErrorMessage($library, $url, $path) {
+function sendErrorReport($library, $url, $path) {
   $headers = 'From: noreply@1point2.fish' . "\r\n" .
       'Reply-To: noreply@1point2.fish' . "\r\n" .
       'X-Mailer: PHP/' . phpversion();
@@ -61,12 +61,14 @@ function mailRelevantUsers($dbh, $lib_updates) {
     $sth -> execute([':userID' => $notify_users[$z]]);
     $libs = $sth -> fetchAll(PDO::FETCH_ASSOC);
     for ($i=0; $i<count($libs);$i++) {
-      $query = 'SELECT name, url, currentVersion FROM libraries WHERE libraryID=:libID';
-      $sth = $dbh -> prepare($query);
-      $sth -> execute([':libID' => $libs[$i]['libraryID']]);
-      $library_info = $sth -> fetch(PDO::FETCH_ASSOC);
-      $message .= $library_info['name'] . ', version ' . $library_info['currentVersion'] . ' released.' . "<br>";
-      $message .= 'Download here: ' . $library_info['url'] . "<br><br>";
+      if (in_array($libs[$i]['libraryID'], $lib_updates)) {
+        $query = 'SELECT name, url, currentVersion FROM libraries WHERE libraryID=:libID';
+        $sth = $dbh -> prepare($query);
+        $sth -> execute([':libID' => $libs[$i]['libraryID']]);
+        $library_info = $sth -> fetch(PDO::FETCH_ASSOC);
+        $message .= $library_info['name'] . ', version ' . $library_info['currentVersion'] . ' released.' . "<br>";
+        $message .= 'Download here: ' . $library_info['url'] . "<br><br>";
+      }
     }
     $query = 'SELECT email FROM users WHERE userID=:userID AND active=:active';
     $sth = $dbh -> prepare($query);
@@ -108,7 +110,7 @@ for ($s=0; $s < count($libs); $s++) {
   $doc = phpQuery::newDocumentHTML($output);
   $version = extractVersion(pq($libs[$s]['path']));
   if (empty($version)) {
-    sendErrorReport($libs[$s]['name'], $libs[$s]['path'], $libs[$s]['url']);
+    sendErrorReport($libs[$s]['name'], $libs[$s]['url'], $libs[$s]['path']);
   } else if ($version != $libs[$s]['currentVersion']) {
     storeVersionNumber($dbh, $libraryID, $version);
     array_push($lib_updates, $libraryID);
