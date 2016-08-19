@@ -99,6 +99,8 @@
               <li>We have a database of supported libraries. We scrape their download pages every day to see if there's a new release.</li>
               <li><h3>When does that happen?</h3></li>
               <li>Once a day at midnight EST.</li>
+              <li><h3>What about sub-versions? E.g., beta branches, o/s-specific releases?</h3></li>
+              <li>Nothing so sophisticated yet, but maybe in the future. Currently we just grab the latest "stable" build of any available library.</li>
             </ul>
         </section>
       </div>
