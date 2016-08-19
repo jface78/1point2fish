@@ -33,6 +33,17 @@ function sendErrorReport($library, $url, $path) {
   mail(MY_EMAIL_ADDRESS, $subject, $message, $headers);
 }
 
+function sendHTTPStatusReport($library, $url, $code) {
+  $headers = 'From: noreply@1point2.fish' . "\r\n" .
+      'Reply-To: noreply@1point2.fish' . "\r\n" .
+      'X-Mailer: PHP/' . phpversion();
+  $subject = 'ERROR contacting 1.2Fish download page';
+  $message = 'The following library returned a ' . $code . ' when a scrape attempt was made:' . "\n\n";
+  $message .= 'Name: ' . $library . "\n";
+  $message .= 'URL: ' . $url . "\n";
+  mail(MY_EMAIL_ADDRESS, $subject, $message, $headers);
+}
+
 function mailRelevantUsers($dbh, $lib_updates) {
   $notify_users = [];
   for ($z=0; $z<count($lib_updates); $z++) {
@@ -106,9 +117,16 @@ for ($s=0; $s < count($libs); $s++) {
   curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
   //$httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
   $output = curl_exec($curl);
-  curl_close($curl);
   $doc = phpQuery::newDocumentHTML($output);
   $version = extractVersion(pq($libs[$s]['path']));
+  $httpCode = curl_getinfo($handle, CURLINFO_HTTP_CODE);
+  curl_close($curl);
+  switch($httpCode) {
+    case 301:
+    case 404:
+      sendHTTPStatusReport($libs[$s]['name'], $libs[$s]['url'], $httpCode);
+      break;
+  }
   if (empty($version)) {
     sendErrorReport($libs[$s]['name'], $libs[$s]['url'], $libs[$s]['path']);
   } else if ($version != $libs[$s]['currentVersion']) {
