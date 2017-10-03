@@ -1,7 +1,7 @@
 <?php
 #!/usr/bin/php -q
-//error_reporting(E_ALL);
-//ini_set('display_errors', 1);
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 include ('../../../fish_credentials.php');
 include ('phpQuery.php');
 
@@ -112,17 +112,20 @@ for ($s=0; $s < count($libs); $s++) {
   curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
   curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
   curl_setopt($curl, CURLOPT_VERBOSE, 1);
+  curl_setopt($curl, CURLOPT_ENCODING, 'identity');
   //disable when live
   curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
   curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
-  $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+
   $output = curl_exec($curl);
+  $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
   $doc = phpQuery::newDocumentHTML($output);
   $version = extractVersion(pq($libs[$s]['path']));
   curl_close($curl);
   switch($httpCode) {
     case 301:
     case 404:
+    case 0:
       sendHTTPStatusReport($libs[$s]['name'], $libs[$s]['url'], $httpCode);
       break;
   }

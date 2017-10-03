@@ -10,7 +10,7 @@ try {
   echo 'Connection failed: ' . $e->getMessage();
 }
 
-$query = 'SELECT libraryID, name, url, currentVersion FROM libraries WHERE isActive=:active ORDER BY libraryID ASC';
+$query = 'SELECT libraryID, name, url, currentVersion FROM libraries WHERE isActive=:active ORDER BY name ASC';
 $sth = $dbh -> prepare($query);
 $sth -> execute([':active' => '1']);
 $libs = $sth -> fetchAll(PDO::FETCH_ASSOC);
