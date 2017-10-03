@@ -64,7 +64,7 @@ if ($result -> success == true) {
     $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
     $subject = 'Verify your address';
     $message = 'You have requested to receive updates from 1point2.fish. Please click on the below link to verify your account:' . "<br><br>";
-    $message .= '<a href="http://1point2.fish/verify.php?hash=' . $hash . '" target="_blank">http://1point2.fish/verify.php</a>' . "<br><br>";
+    $message .= '<a href="https://1point2.fish/verify.php?hash=' . $hash . '" target="_blank">https://1point2.fish/verify.php</a>' . "<br><br>";
     $message .= 'If this was sent to you in error, please ignore this email.';
     mail($_POST['email'], $subject, $message, $headers);
   }
